@@ -15,8 +15,12 @@ class Solutions
     const double pi = 3.14;
 
 
-    arma::mat calc(int, arma::vec);
+    arma::vec calc(int, arma::vec);
+    //Test à effectuer
+    int factorielle(int);
 
+    //Test à effectuer
+    arma::vec hermite(int, arma::vec);
     private:
     // constante de Plank
     double h=1.0;
