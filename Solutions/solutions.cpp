@@ -17,8 +17,10 @@ int Solutions::factorielle(int n){
 }
 
 arma::vec Solutions::hermite(int n, arma::vec z){
+    //Initialisation 
     arma::vec H0=arma::ones(size(z));
     arma::vec H1=2*z;
+    
     if(n==0){
         return H0;
     }
