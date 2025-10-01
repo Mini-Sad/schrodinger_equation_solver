@@ -16,11 +16,6 @@ class Solutions
      */
     Solutions(double _m, double _h, double _w);
 
-
-
-
-
-
     /**
      * @brief Fonction de récurrence qui calcule la factorielle de int 
      * @param int : entier

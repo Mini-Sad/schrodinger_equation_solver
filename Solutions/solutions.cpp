@@ -39,8 +39,8 @@ arma::vec Solutions::calc(int n, arma::vec z)
     double factor_1=1.0/sqrt(pow(2,n)*factorielle(n));
     double factor_2=pow((m*w)/(pi*h),1/4);
     arma::vec factor_3=arma::exp(((-1)*w*arma::pow(z,3))/(2*h));
-    arma::vec factor_4=hermite(n, sqrt((m*w/h)*z));
-    result=factor_1*factor_2*factor_3;
+    arma::vec factor_4=hermite(n, sqrt((m*w/h)*z)).t();
+    result=factor_1*factor_2*factor_3*factor_4;
     
     return result;
 }
