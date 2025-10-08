@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -O3 -std=c++11
-LDFLAGS =
+CXXFLAGS = -Wall -O3 -std=c++14 $(CXXFLAGS_diff)
+LDFLAGS = $(LDFLAGS_mac)
 LIBS = -larmadillo
 SRC_DIR = src
 OBJ_DIR = obj
