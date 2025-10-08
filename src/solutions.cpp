@@ -1,6 +1,7 @@
 #include "../include/solutions.h"
 
 
+
 //Constructeur
 Solutions::Solutions(double _m, double _h , double _w ) : m(_m), h(_h), w(_w)
 {
@@ -28,7 +29,7 @@ arma::vec Solutions::hermite(int n, arma::vec z){
         return H1;
     }
     else{
-        return 2*hermite(n-1,z)-2*(n-1)*hermite(n-2,z);
+        return 2*z%hermite(n-1,z)-2*(n-1)*hermite(n-2,z);
     }
 }
 
