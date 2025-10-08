@@ -1,6 +1,6 @@
 #include "../include/solutions.h"
 
-int main(int, char**)
+int main(int charc, char *argv[])
 {
     Solutions solutions(1.0,1.0,1.0);
 
