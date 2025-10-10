@@ -14,10 +14,10 @@ class Solutions
     /**
      * @brief Constructeur
      */
-    Solutions(double _m, double _h, double _w);
+    Solutions(double _m=1, double _h=1, double _w=1);
 
     /**
-     * @brief Fonction de récurrence qui calcule la factorielle de int 
+     * @brief Fonction de récurrence qui calcule la factorielle de int
      * @param int : entier
      * @return factorielle de int
      */
@@ -44,11 +44,11 @@ class Solutions
 
     private:
     // constante de Plank
-    double h=1.0;
+    double h;
     // masse
-    double m=1.0;
+    double m;
     // pulsation angulaire (angular frequence)
-    double w=1.0;
+    double w;
     //pi
     const double pi = 3.14;
 

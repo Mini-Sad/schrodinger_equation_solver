@@ -3,32 +3,39 @@
 
 
 //Constructeur
-Solutions::Solutions(double _m, double _h , double _w ) : m(_m), h(_h), w(_w)
+Solutions::Solutions(double _m, double _h, double _w ) : m(_m), h(_h), w(_w)
 {
 
 }
 
-int Solutions::factorielle(int n){
-    if(n==0){
+int Solutions::factorielle(int n)
+{
+    if(n==0)
+    {
         return 1;
     }
-    else {
+    else
+    {
         return factorielle(n-1)*n;
     }
 }
 
-arma::vec Solutions::hermite(int n, arma::vec z){
-    //Initialisation 
+arma::vec Solutions::hermite(int n, arma::vec z)
+{
+    //Initialisation
     arma::vec H0=arma::ones(size(z));
     arma::vec H1=2*z;
 
-    if(n==0){
+    if(n==0)
+    {
         return H0;
     }
-    else if (n==1){
+    else if (n==1)
+    {
         return H1;
     }
-    else{
+    else
+    {
         return 2*z%hermite(n-1,z)-2*(n-1)*hermite(n-2,z);
     }
 }
@@ -42,6 +49,6 @@ arma::vec Solutions::calc(int n, arma::vec z)
     arma::vec factor_3=arma::exp(((-1)*w*arma::pow(z,3))/(2*h));
     arma::vec factor_4=hermite(n, sqrt((m*w/h)*z));
     result=factor_1*factor_2*factor_3%factor_4;
-    
+
     return result;
 }

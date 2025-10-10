@@ -16,7 +16,7 @@ class TestSolutions: public CxxTest::TestSuite
     {
         arma::vec z =arma::linspace(0,10,100);
         Solutions solutions(1.0,1.0,1.0);
-        TS_ASSERT_EQUALS(solutions.hermite(5,z),arma::ones(size(z))));
+        TS_ASSERT_EQUALS(solutions.hermite(5,z),arma::ones(size(z)));
 
     }
 };
