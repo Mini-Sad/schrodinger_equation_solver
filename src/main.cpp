@@ -8,9 +8,5 @@ int main(int charc, char *argv[])
     int n=5;
     auto result =solutions.calc(n,z);
     result.print("Calcul de l'oscillateur harmonique 1D en fonction de z pour un n donné");
-
-
-
-
-
+    return 0;
 }
