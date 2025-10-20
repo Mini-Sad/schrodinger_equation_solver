@@ -49,6 +49,9 @@ arma::vec Solutions::calc(int n, arma::vec z)
     arma::vec factor_3=arma::exp(-(m*w/(2*h))*arma::pow(z,2));  // Correction: z^2 au lieu de z^3
     arma::vec factor_4=hermite(n, sqrt((m*w/h))*z);
     result=factor_1*factor_2*factor_3%factor_4;
+    
+    // Normalisation supplémentaire pour compenser le facteur √π des polynômes d'Hermite
+    result = result / sqrt(sqrt(pi));
 
     return result;
 }
@@ -87,4 +90,75 @@ double Solutions::energie_numerique(int n, arma::vec z)
     double energie_moy = arma::mean(E_totale.subvec(debut, fin));
     
     return energie_moy;
+}
+
+double Solutions::produit_scalaire(int n, int m, arma::vec z)
+{
+    // Calculer ψ_n(z) et ψ_m(z)
+    arma::vec psi_n = calc(n, z);
+    arma::vec psi_m = calc(m, z);
+    
+    // Produit élément par élément
+    arma::vec integrand = psi_n % psi_m;  // % est le produit élément par élément
+    
+    // Intégration par la méthode des trapèzes manuelle
+    double dz = z(1) - z(0);
+    int N = z.n_elem;
+    double integral = 0.0;
+    
+    // Formule des trapèzes: ∫f(x)dx ≈ dz * (f0/2 + f1 + f2 + ... + fn-1 + fn/2)
+    integral = (integrand(0) + integrand(N-1)) / 2.0;
+    for(int i = 1; i < N-1; i++)
+    {
+        integral += integrand(i);
+    }
+    integral *= dz;
+    
+    return integral;
+}
+
+void Solutions::verifier_orthonormalite(int n_max, arma::vec z)
+{
+    cout << "\n=== Vérification de l'orthonormalité ===" << endl;
+    cout << "Matrice <ψ_n|ψ_m> (devrait être la matrice identité):\n" << endl;
+    
+    // Créer une matrice pour stocker les résultats
+    arma::mat matrice_ortho(n_max, n_max);
+    
+    // Calculer tous les produits scalaires
+    for(int n = 0; n < n_max; n++)
+    {
+        for(int m = 0; m < n_max; m++)
+        {
+            matrice_ortho(n, m) = produit_scalaire(n, m, z);
+        }
+    }
+    
+    // Afficher la matrice
+    cout << "     ";
+    for(int m = 0; m < n_max; m++)
+        cout << "n=" << m << "      ";
+    cout << endl;
+    
+    for(int n = 0; n < n_max; n++)
+    {
+        cout << "n=" << n << "  ";
+        for(int m = 0; m < n_max; m++)
+        {
+            cout << fixed << setprecision(4) << matrice_ortho(n, m) << "   ";
+        }
+        cout << endl;
+    }
+    
+    // Calculer l'écart par rapport à l'identité
+    arma::mat identite = arma::eye(n_max, n_max);
+    arma::mat difference = matrice_ortho - identite;
+    double erreur_max = arma::abs(difference).max();
+    
+    cout << "\nErreur maximale par rapport à l'identité: " << erreur_max << endl;
+    
+    if(erreur_max < 0.01)
+        cout << "✅ Orthonormalité vérifiée avec succès!" << endl;
+    else
+        cout << "⚠️  Attention: erreur importante, augmenter le domaine z ou le nombre de points" << endl;
 }

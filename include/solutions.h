@@ -4,6 +4,7 @@
 #include <armadillo>
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -55,6 +56,22 @@ class Solutions
      */
     double energie_numerique(int n, arma::vec z);
 
+    /**
+     * @brief Calcule le produit scalaire entre deux états
+     * @param n : premier niveau d'énergie
+     * @param m : second niveau d'énergie
+     * @param z : axe de position
+     * @return <ψ_n|ψ_m> (devrait être δ_nm)
+     */
+    double produit_scalaire(int n, int m, arma::vec z);
+    
+    /**
+     * @brief Vérifie l'orthonormalité pour plusieurs états
+     * @param n_max : nombre d'états à vérifier
+     * @param z : axe de position
+     */
+    void verifier_orthonormalite(int n_max, arma::vec z);
+
 
 
     private:
@@ -65,7 +82,7 @@ class Solutions
     // pulsation angulaire (angular frequence)
     double w;
     //pi
-    const double pi = 3.14;
+    const double pi = M_PI;  // Utiliser la constante mathématique précise
 
 };
 
