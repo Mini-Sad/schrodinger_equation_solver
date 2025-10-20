@@ -1999,3 +1999,38 @@ Calcul de l'oscillateur harmonique 1D en fonction de z pour un n donné
    8.5950e-18
    7.8177e-18
    7.1100e-18
+
+=== Vérification de l'énergie ===
+n = 0
+  E théorique  = 0.5
+  E numérique  = 0.499672
+  Erreur rel.  = 0.0655698 %
+n = 1
+  E théorique  = 1.5
+  E numérique  = 1.49976
+  Erreur rel.  = 0.0158966 %
+n = 2
+  E théorique  = 2.5
+  E numérique  = 2.49983
+  Erreur rel.  = 0.00678786 %
+n = 3
+  E théorique  = 3.5
+  E numérique  = 3.4998
+  Erreur rel.  = 0.00581649 %
+n = 4
+  E théorique  = 4.5
+  E numérique  = 4.49981
+  Erreur rel.  = 0.00430241 %
+
+=== Vérification de l'orthonormalité ===
+Matrice <ψ_n|ψ_m> (devrait être la matrice identité):
+
+     n=0      n=1      n=2      n=3      n=4      
+n=0  1.0000   0.0000   -0.0000   -0.0000   -0.0000   
+n=1  0.0000   1.0000   0.0000   -0.0000   0.0000   
+n=2  -0.0000   0.0000   1.0000   -0.0000   -0.0000   
+n=3  -0.0000   -0.0000   -0.0000   1.0000   -0.0000   
+n=4  -0.0000   0.0000   -0.0000   -0.0000   1.0000   
+
+Erreur maximale par rapport à l'identité: 0.0000
+✅ Orthonormalité vérifiée avec succès!

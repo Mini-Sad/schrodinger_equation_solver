@@ -75,10 +75,10 @@ class Solutions
 
 
     private:
-    // constante de Plank
-    double h;
     // masse
     double m;
+    // constante de Plank
+    double h;
     // pulsation angulaire (angular frequence)
     double w;
     //pi
