@@ -40,6 +40,21 @@ class Solutions
      */
     arma::vec calc(int, arma::vec);
 
+    /**
+     * @brief Calcule l'énergie théorique de l'état n
+     * @param n : niveau d'énergie
+     * @return Énergie théorique En = ℏω(n + 1/2)
+     */
+    double energie_theorique(int n);
+
+    /**
+     * @brief Calcule l'énergie de l'état n numériquement
+     * @param n : niveau d'énergie
+     * @param z : axe de position
+     * @return Énergie calculée numériquement
+     */
+    double energie_numerique(int n, arma::vec z);
+
 
 
     private:
