@@ -92,34 +92,70 @@ double Solutions::energie_numerique(int n, arma::vec z)
     return energie_moy;
 }
 
-double Solutions::produit_scalaire(int n, int m, arma::vec z)
+// --- Gauss-Legendre: nœuds/poids sur [-1,1] (Golub–Welsch) ---
+void Solutions::gauss_legendre_nodes_weights(unsigned p, arma::vec& x, arma::vec& w)
 {
-    // Calculer ψ_n(z) et ψ_m(z)
-    arma::vec psi_n = calc(n, z);
-    arma::vec psi_m = calc(m, z);
-    
-    // Produit élément par élément
-    arma::vec integrand = psi_n % psi_m;  // % est le produit élément par élément
-    
-    // Intégration par la méthode des trapèzes manuelle
-    double dz = z(1) - z(0);
-    int N = z.n_elem;
-    double integral = 0.0;
-    
-    // Formule des trapèzes: ∫f(x)dx ≈ dz * (f0/2 + f1 + f2 + ... + fn-1 + fn/2)
-    integral = (integrand(0) + integrand(N-1)) / 2.0;
-    for(int i = 1; i < N-1; i++)
-    {
-        integral += integrand(i);
+    if (p < 1) {
+        x.reset(); w.reset();
+        return;
     }
-    integral *= dz;
-    
-    return integral;
+
+    // Matrice de Jacobi tridiagonale (polynômes de Legendre)
+    arma::mat J(p, p, arma::fill::zeros);
+    for (unsigned k = 1; k < p; ++k) {
+        // sous/sur-diagonale β_k = 1 / (2*sqrt(1 - 1/(4k^2)))
+        double kk = static_cast<double>(k);
+        double beta = 0.5 / std::sqrt(1.0 - 1.0 / (4.0 * kk * kk));
+        J(k-1, k) = beta;
+        J(k, k-1) = beta;
+    }
+
+    // Valeurs propres -> nœuds, vecteurs propres -> poids
+    arma::vec eigval;
+    arma::mat eigvec;
+    arma::eig_sym(eigval, eigvec, J);
+
+    x = eigval;                              // nœuds dans (-1,1)
+    w = 2.0 * arma::square(eigvec.row(0).t()); // poids = 2*(v_0i)^2
 }
 
-void Solutions::verifier_orthonormalite(int n_max, arma::vec z)
+// --- Produit scalaire ⟨ψ_m, ψ_n⟩ via Gauss-Legendre sur [a,b] ---
+double Solutions::produit_scalaire_gauss(int n, int m, double a, double b, unsigned p) const
 {
-    cout << "\n=== Vérification de l'orthonormalité ===" << endl;
+    if (b <= a) throw std::invalid_argument("[Gauss] intervalle invalide: b doit être > a");
+    if (p < 1)   throw std::invalid_argument("[Gauss] ordre p doit être >= 1");
+
+    arma::vec x, w;
+    const_cast<Solutions*>(this)->gauss_legendre_nodes_weights(p, x, w);   // nœuds/poids sur [-1,1]
+
+    // Affinage vers [a,b] : z_i = (b-a)/2 * x_i + (a+b)/2
+    arma::vec z = 0.5 * ((b - a) * x + (b + a));
+    double J = 0.5 * (b - a);                // Jacobien
+
+    // Évaluer ψ_n et ψ_m aux nœuds de Gauss
+    arma::vec psi_n = const_cast<Solutions*>(this)->calc(n, z);
+    arma::vec psi_m = const_cast<Solutions*>(this)->calc(m, z);
+
+    // Intégrande (réel ici) : ψ_m(z_i) * ψ_n(z_i)
+    arma::vec f = psi_m % psi_n;
+
+    // Somme pondérée: ∫ ≈ J * Σ w_i f(z_i)
+    double I = arma::dot(w, f) * J;
+    return I;
+}
+
+// --- Variante pratique : déduire [a,b] d'une grille z fournie ---
+double Solutions::produit_scalaire_gauss(int n, int m, const arma::vec& z, unsigned p) const
+{
+    if (z.n_elem < 2) throw std::invalid_argument("[Gauss] z doit contenir au moins 2 points");
+    double a = z.min();
+    double b = z.max();
+    return produit_scalaire_gauss(n, m, a, b, p);
+}
+
+void Solutions::verifier_orthonormalite(int n_max, arma::vec z, unsigned p)
+{
+    cout << "\n=== Vérification de l'orthonormalité (Gauss-Legendre, p=" << p << ") ===" << endl;
     cout << "Matrice <ψ_n|ψ_m> (devrait être la matrice identité):\n" << endl;
     
     // Créer une matrice pour stocker les résultats
@@ -130,7 +166,7 @@ void Solutions::verifier_orthonormalite(int n_max, arma::vec z)
     {
         for(int m = 0; m < n_max; m++)
         {
-            matrice_ortho(n, m) = produit_scalaire(n, m, z);
+            matrice_ortho(n, m) = produit_scalaire_gauss(n, m, z, p);
         }
     }
     
@@ -160,5 +196,5 @@ void Solutions::verifier_orthonormalite(int n_max, arma::vec z)
     if(erreur_max < 0.01)
         cout << "✅ Orthonormalité vérifiée avec succès!" << endl;
     else
-        cout << "⚠️  Attention: erreur importante, augmenter le domaine z ou le nombre de points" << endl;
+        cout << "⚠️  Attention: erreur importante, augmenter l'ordre p de la quadrature" << endl;
 }
