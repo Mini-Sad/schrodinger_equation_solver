@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <stdexcept>
 
 using namespace std;
 
@@ -57,20 +58,41 @@ class Solutions
     double energie_numerique(int n, arma::vec z);
 
     /**
-     * @brief Calcule le produit scalaire entre deux états
+     * @brief Calcule les nœuds et poids de Gauss-Legendre sur [-1,1]
+     * @param p : ordre de la quadrature
+     * @param x : vecteur des nœuds (sortie)
+     * @param w : vecteur des poids (sortie)
+     */
+    void gauss_legendre_nodes_weights(unsigned p, arma::vec& x, arma::vec& w);
+    
+    /**
+     * @brief Calcule le produit scalaire via Gauss-Legendre sur [a,b]
      * @param n : premier niveau d'énergie
      * @param m : second niveau d'énergie
-     * @param z : axe de position
-     * @return <ψ_n|ψ_m> (devrait être δ_nm)
+     * @param a : borne inférieure
+     * @param b : borne supérieure
+     * @param p : ordre de la quadrature
+     * @return <ψ_n|ψ_m>
      */
-    double produit_scalaire(int n, int m, arma::vec z);
+    double produit_scalaire_gauss(int n, int m, double a, double b, unsigned p) const;
+    
+    /**
+     * @brief Calcule le produit scalaire via Gauss-Legendre (déduit [a,b] de z)
+     * @param n : premier niveau d'énergie
+     * @param m : second niveau d'énergie
+     * @param z : grille pour déduire [a,b]
+     * @param p : ordre de la quadrature
+     * @return <ψ_n|ψ_m>
+     */
+    double produit_scalaire_gauss(int n, int m, const arma::vec& z, unsigned p) const;
     
     /**
      * @brief Vérifie l'orthonormalité pour plusieurs états
      * @param n_max : nombre d'états à vérifier
      * @param z : axe de position
+     * @param p : ordre de la quadrature Gauss-Legendre
      */
-    void verifier_orthonormalite(int n_max, arma::vec z);
+    void verifier_orthonormalite(int n_max, arma::vec z, unsigned p);
 
 
 
