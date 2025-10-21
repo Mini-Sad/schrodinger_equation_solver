@@ -32,7 +32,7 @@ A. K. Yahaya, S. Yu, Y. Abdel Wedoud  - ENSIIE - 2025
 ] -->
 
 .footnote[
-[:book:](../index.html)
+[:book:](index.html)
 ]
 
 ???
@@ -53,93 +53,126 @@ layout: true
 class: animated fadeIn middle numbers
 
 .footnote[
-Porjet IPS - A. K. Yahaya, S. Yu, Y. Abdel Wedoud  - ENSIIE - 2025 - [:book:](../index.html)
-]
-
----
-
-# `remark.js` ??? WTF ?
-
-* `remark.js` is a simple HTML5 + javascript presentation tool.
-
-  :arrow_right: to view your presentation, you only need a web browser (even offline).
-
-* the presentation description is written in **markdown** in the source file.
-
-  :arrow_right: the markdown code for this slide starts like this:
-
-```markdown
-# `remark.js` ??? WTF ?
-
-* `remark.js` is a simple HTML5 + javascript presentation tool.
-
-  :arrow_right: to view your presentation, you only need a web browser (even offline).
-
-
-
-```
-
-* some extensions allow to include code, `$\LaTeX$`, tables, diagrams, emojis...
-
----
-
-# :warning: important remark for firefox users
-
-Browsing a **local** `remark.js` presentation and some content does not work (asciinema...) ?
-
-1. go to *`about:config`*,
-
-2. search for the *`origin_policy`* pattern,
-
-3. set the property *`security.fileuri.strict_origin_policy`* to *`false`*.
-
-.hcenter.shadow.w80.animated.fadeInUp.wait1s[
-![](images/firefox_config.png)
+Porjet IPS - A. K. Yahaya, S. Yu, Y. Abdel Wedoud  - ENSIIE - 2025 - [:book:](index.html)
 ]
 
 
 ---
 
 class: toc top
-# Example of a table of content
+# Sommaire
 
-1. First section
---
+1. Structure du projet
+  1. Choix de classes
+  2. Hierarchie des fichiers
 
-  1. First subsection
---
 
-  2. Second subsection
---
+2. Compilation et documentation
+  1. Chaine de compilation
+  2. Documentation
 
-2. Second section
-  * First subsection
---
 
-2. Third section
-  1. First subsection
+3. Implémentation
+  1. Polynomes d'Hermite
+  2. Evaluation de la fonction d'onde
+  3. Extrait de code
+
+4. Test et validation
+  1. Tests unitaires
+  2. Historique git
+  
+5. Résultats numérique
+  1. Graphe de quelques Solutions
+  2. Vérification de l'orthogonalité
+
+6. Conclusion et perspectives
 
 ---
 
-# :clipboard: Example of table
 
-## A table
-.hcenter[
-| Points                  | `git` | `doxygen` | `VTK` | `python` | `gdb` | `MPI` | `$\LaTeX$` | `LAPACK` |
-|:------------------------|:-----:|:---------:|:-----:|:--------:|:-----:|:-----:|:------------:|:--------:|
-| *0*. What ?             |       |           |       |          |       |       |              |          |
-| *1*. I tried it once... |       |           |       |          |       |       |              |          |
-| *2*. I use it.          |       |           |  :+:  |          |  :+:  |       |              |          |
-| *3*. I love it !        |  :+:  |    :+:    |       |   :+:    |       |  :+:  |      :+:     |    :+:   |
+# Structure du projet
+## Choix de classes
+
+Une seule classe: Solutions
+- Une seule classe implémentée : **`Solutions`**
+
+- Rôle : regrouper toutes les méthodes liées à l’oscillateur harmonique 1D
+  - Calcul des polynômes d’Hermite  
+  - Évaluation des fonctions d’onde ψₙ(z)  
+  - Calcul des énergies <!-- (théoriques et numériques) --> 
+  - Vérification de l’orthonormalité  
+
+- Avantages :
+  - Centralisation du code <!--→ plus clair et modulaire   -->
+  - Facile à étendre <!-- (HO en 2D, 3D, autres potentiels)  -->
+  - Encapsulation des paramètres physiques (`m, h, w`)
+
+---
+<!-- class: small-code -->
+
+# Structure du projet
+## Choix de classes
+
+
+### Extrait du fichier `solutions.h`
+
+```cpp
+class Solutions {
+  public:
+    Solutions(double m=1, double h=1, double w=1);
+    arma::vec hermite(int n, arma::vec z);
+    arma::vec calc(int n, arma::vec z);
+    double energie_theorique(int n);
+    double energie_numerique(int n, arma::vec z);
+    double produit_scalaire(int n, int m, arma::vec z);
+    void verifier_orthonormalite(int n_max, arma::vec z);
+  private:
+    double m, h, w;
+};
+```
+---
+
+# Structure du projet
+## Hiérarchie des fichiers
+
+
+.alert.tree.hcenter[
+project_1
+* bin
+* docs
+* include
+    * **solutions.h**
+* obj
+* pres
+* scripts
+* tests
+    * **test_solutions.cpp**
+* src
+    * **main.cpp**
+    * **solutions.cpp**
+* **Makefile**
 ]
 
-.hcenter[Centered caption]
+---
+# Compilation et documentation
+## Chaîne de compilation
 
-## Some math
-`$$\int_0^\infty f(x)e^{-x} dx \simeq \sum_{i=0}^{n-1}w_if(x_i)$$`
-
+.mermaid[
+graph TD
+    H[solutions.h]
+    A[solutions.cpp] --> O1[solutions.o]
+    M[main.cpp] --> O2[main.o]
+    A --> H
+    M --> H
+    O1 --> B[bin/main]
+    O2 --> B[bin/main]
+]
 ---
 
+# Compilation et documentation
+![Compilation Diagram](compilation.png)
+
+---
 # How to show a terminal capture or some code ?
 
 * Show a colored terminal capture with `gnome-terminal` "copy as HTML":
@@ -367,6 +400,17 @@ This is a serious `git` graph made with `gitgraph.js`.
 .column.w65[
 <canvas id='gitExample0'></canvas>
 ]
+]
+
+---
+
+.mermaid[
+gitGraph
+    commit id: "Création de la classe Solutions"
+    commit id: "Premier calcul des fonctions d’onde"
+    commit id: "Ajout des tests unitaires"
+    commit id: "Implémentation energie_numerique"
+    commit id: "Vérification de l’orthonormalité"
 ]
 
 ---

@@ -1,0 +1,34 @@
+digraph compilation {
+    rankdir=LR;
+    node [shape=box, style=filled, color=lightblue];
+
+    // Source files
+    main_cpp [label="src/main.cpp"];
+    solutions_cpp [label="src/solutions.cpp"];
+    solutions_h [label="include/solutions.h", shape=ellipse, color=lightgreen];
+
+    // Object files
+    main_o [label="obj/main.o"];
+    solutions_o [label="obj/solutions.o"];
+
+    // Executable
+    executable [label="bin/main", shape=diamond, color=orange];
+
+    // Dependencies
+    main_cpp -> main_o;
+    solutions_cpp -> solutions_o;
+    solutions_h -> main_o;
+    solutions_h -> solutions_o;
+    main_o -> executable;
+    solutions_o -> executable;
+
+    // Optional: tests
+    test_cpp [label="tests/test_solutions.cpp"];
+    test_o [label="obj/test_solutions.o"];
+    test_exe [label="bin/test_solutions", shape=diamond, color=orange];
+
+    test_cpp -> test_o;
+    solutions_h -> test_o;
+    solutions_o -> test_exe;
+    test_o -> test_exe;
+}
