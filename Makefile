@@ -43,7 +43,7 @@ clean:
 .PHONY: tests
 tests:
 	$(MAKE) -C tests
-	./tests/test
+	./tests/test_solutions
 
 
 run:$(TARGET)

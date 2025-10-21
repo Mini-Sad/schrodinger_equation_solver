@@ -365,61 +365,48 @@ public:
 
 **Compilation et exécution** :
 ```bash
-make test
+make tests
 ./bin/test_solutions
 ```
 
 ---
 
 # Test et validation
-## Historique Git
-
-.mermaid[
-gitGraph
-    commit id: "Init projet"
-    commit id: "Restructuration fichiers"
-    commit id: "Polynômes Hermite"
-    commit id: "Tests unitaires CxxTest"
-    commit id: "Plot solutions"
-    commit id: "Vérif énergie numérique"
-    branch feature/orthonormalite
-    commit id: "Orthonormalité v1"
-    commit id: "Gauss-Legendre"
-    checkout main
-    merge feature/orthonormalite
-    commit id: "Config Doxyfile"
-    commit id: "Slides présentation"
-    commit id: "Quadrature finale"
-]
-
----
-
-# Test et validation
-## Exemples de messages de commit
+## Historique git
 
 Quelques commits significatifs du projet :
 
 ```bash
-commit 2999c1a - Déplacement des fichiers et mise à jour du Makefile
-  Restructuration complète de l'arborescence du projet
+commit 76f2fca7 -Author: Abdoul Kader Saad  - maj et ajout de la chaine de compilation des tests
+  → Finalisation de la compilation automatisée pour les tests unitaires
 
-commit 5754fb0 - Mise à jour du polynôme d'hermite
-  Correction de l'implémentation récursive
+commit be437183 -Author: yhdh- test unitaire pour l’énergie et la vérification de l’orthonormalité
+  → Validation des résultats physiques par tests CxxTest
 
-commit 9be61e5 - Ajout d'un fichier de test
-  Premiers tests unitaires avec CxxTest
+commit 67289d4f -Author: Abdoul Kader Saad  - ajout des flags Armadillo dans la compilation des tests
+  → Support complet des bibliothèques scientifiques
 
-commit 5368127 - plot de la solution
-  Visualisation des fonctions d'onde avec Python
+commit 784ff0b5 -Author: yhdh- vérification numérique de l’énergie
+  → Calcul des énergies propres par intégration numérique
 
-commit 784ff0b - vérification numéric de l'énergie
-  Implémentation du calcul numérique des énergies
+commit eced59dd -Author: yhdh - orthonormalité première version
+  → Première approche des produits scalaires entre fonctions d’onde
 
-commit eced59d - orthonormalité première version
-  Calcul des produits scalaires
+commit 53681276 -Author: yhdh - plot de la solution
+  → Visualisation graphique des fonctions d’onde
 
-commit 287dca7 - vérification de l'orthonormalité avec Gauss-Legendre
-  Intégration numérique précise avec quadrature de Gauss-Legendre
+commit 9be61e59 -Author: YU- ajout d’un fichier de test
+  → Premiers tests unitaires de validation
+
+commit 5754fb06 -Author: YU- mise à jour du polynôme d’Hermite
+  → Correction de la récurrence du polynôme d’Hermite
+
+commit efb56f9f -Author: YU- implementation 1D-HO
+  → Première implémentation du solveur pour l’oscillateur harmonique 1D
+
+commit a0e1bc9a - Author: Abdoul Kader Saad   - initial commit
+  → Création du dépôt et première version de l’arborescence
+
 ```
 
 ---

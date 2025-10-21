@@ -13,7 +13,7 @@ BIN_DIR=../bin
 SRC_DIR=../src
 TEST_SRC=test_solutions.h
 SOLUTIONS_SRC=$(SRC_DIR)/solutions.cpp
-TARGET = test
+TARGET = test_solutions
 
 all:$(TARGET)
 
