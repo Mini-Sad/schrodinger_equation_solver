@@ -27,15 +27,9 @@ $(TEST_OBJ):$(TEST_CPP)
 	$(CXX) $(CXXFLAGS) -c $(TEST_CPP) -o $(TEST_OBJ)     
 
 $(TARGET):$(TEST_OBJ) $(SOLUTIONS_OBJ)
-	$(CXX) $(TEST_OBJ) $(SOLUTIONS_OBJ) -o $(TARGET) $(LIBS)
-
-
+	$(CXX) $(LIBS) $(TEST_OBJ) $(SOLUTIONS_OBJ) -o $(TARGET) $(LIBS)
 
 .PHONY: clean
 clean:
 	rm -f $(TEST_CPP) $(SOLUTIONS_OBJ) $(TEST_OBJ)
 	rm -f $(TARGET) 
-
-
-
-
