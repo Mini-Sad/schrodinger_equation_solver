@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Presentation template</title>
+    <title>Projet IPS: Solutions de l'équation de Schrodinger</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="core/fonts/mono.css"> 
     <link rel="stylesheet" type="text/css" href="core/css/animate.css"> 
@@ -146,6 +146,7 @@ project_1
 * pres
 * scripts
 * tests
+    * **Makefile**
     * **test_solutions.cpp**
 * src
     * **main.cpp**
@@ -156,21 +157,8 @@ project_1
 ---
 # Compilation et documentation
 ## Chaîne de compilation
-
-.mermaid[
-graph TD
-    H[solutions.h]
-    A[solutions.cpp] --> O1[solutions.o]
-    M[main.cpp] --> O2[main.o]
-    A --> H
-    M --> H
-    O1 --> B[bin/main]
-    O2 --> B[bin/main]
-]
----
-
-# Compilation et documentation
-![Compilation Diagram](compilation.png)
+![Main build](main_build.png)
+![Main build](tests_build.png)
 
 ---
 
@@ -181,19 +169,18 @@ Le Makefile gère automatiquement la compilation complète du projet :
 
 ```makefile
 CXX = g++
-CXXFLAGS = -Wall -O3 -std=c++14 -I/opt/homebrew/include
-LDFLAGS = -L/opt/homebrew/lib
+CXXFLAGS = -Wall -O3 -std=c++14 $(CXXFLAGS_diff)
+LDFLAGS = $(LDFLAGS_mac)
 LIBS = -larmadillo
-
-# Répertoires
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 INC_DIR = include
 TARGET = $(BIN_DIR)/main
 
-# Détection automatique des sources
+# Recherche tous les fichiers .cpp dans le dossier SRC_DIR
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+# Transforme tous les chemins de $(SRC_DIR) en chemin .o dans le dossier $(OBJ_DIR)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
 # Règle par défaut
@@ -204,6 +191,18 @@ $(TARGET): $(OBJS) | $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+
+# Nettoyage
+.PHONY: clean
+clean:
+	rm -f $(OBJ_DIR)/*.o
+	rm -f $(TARGET)
+	$(MAKE) -C tests clean
+
+# Compilation des tests unitaires
+.PHONY: tests
+tests:
+	$(MAKE) -C tests
 ```
 
 ---
@@ -411,7 +410,7 @@ commit 9be61e5 - Ajout d'un fichier de test
   Premiers tests unitaires avec CxxTest
 
 commit 5368127 - plot de la solution
-  Visualisation des fonctions d'onde avec Python/Matplotlib
+  Visualisation des fonctions d'onde avec Python
 
 commit 784ff0b - vérification numéric de l'énergie
   Implémentation du calcul numérique des énergies
@@ -504,7 +503,7 @@ Erreur maximale : 0.0001
 ✓ Tests d'orthonormalité (précision 10⁻¹²)  
 ✓ Documentation Doxygen complète  
 ✓ Tests unitaires avec CxxTest  
-✓ Visualisation avec Python/Matplotlib
+✓ Visualisation avec Python
 
 ## Perspectives d'amélioration
 

@@ -1,4 +1,4 @@
-digraph compilation {
+digraph main_build {
     rankdir=LR;
     node [shape=box, style=filled, color=lightblue];
 
@@ -12,23 +12,13 @@ digraph compilation {
     solutions_o [label="obj/solutions.o"];
 
     // Executable
-    executable [label="bin/main", shape=diamond, color=orange];
+    main_exe [label="bin/main", shape=diamond, color=orange];
 
     // Dependencies
     main_cpp -> main_o;
     solutions_cpp -> solutions_o;
     solutions_h -> main_o;
     solutions_h -> solutions_o;
-    main_o -> executable;
-    solutions_o -> executable;
-
-    // Optional: tests
-    test_cpp [label="tests/test_solutions.cpp"];
-    test_o [label="obj/test_solutions.o"];
-    test_exe [label="bin/test_solutions", shape=diamond, color=orange];
-
-    test_cpp -> test_o;
-    solutions_h -> test_o;
-    solutions_o -> test_exe;
-    test_o -> test_exe;
+    main_o -> main_exe;
+    solutions_o -> main_exe;
 }
